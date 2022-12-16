@@ -19,6 +19,7 @@ export default class NewBill {
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    console.log(e.target.value);
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
 
@@ -26,7 +27,7 @@ export default class NewBill {
     const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
     const errorFragment = document.createRange().createContextualFragment(
       `<p id='file-error'>Veuillez sélectionner un fichier de type .jpg .jpeg ou .png</p>`)
-      
+
     if(!allowedExtensions.test(fileName)) {
       e.target.value = '';
       if(!document.getElementById('file-error')) {
@@ -35,7 +36,7 @@ export default class NewBill {
       }
       return
     } else {
-      document.getElementById('file-error').remove()
+      // document.getElementById('file-error').remove()
     }
     //
 
