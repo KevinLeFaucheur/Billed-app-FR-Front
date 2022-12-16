@@ -15,11 +15,30 @@ export default class NewBill {
     this.billId = null
     new Logout({ document, localStorage, onNavigate })
   }
+
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+
+    // File validation
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+    const errorFragment = document.createRange().createContextualFragment(
+      `<p id='file-error'>Veuillez sélectionner un fichier de type .jpg .jpeg ou .png</p>`)
+      
+    if(!allowedExtensions.test(fileName)) {
+      e.target.value = '';
+      if(!document.getElementById('file-error')) {
+        e.target.parentNode.appendChild(errorFragment)
+        document.getElementById('file-error').style.color = 'red'
+      }
+      return
+    } else {
+      document.getElementById('file-error').remove()
+    }
+    //
+
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
@@ -40,6 +59,7 @@ export default class NewBill {
         this.fileName = fileName
       }).catch(error => console.error(error))
   }
+  
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
