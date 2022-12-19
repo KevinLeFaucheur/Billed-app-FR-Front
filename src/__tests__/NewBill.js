@@ -15,13 +15,11 @@ import mockStore from "../__mocks__/store"
 
 
 describe("Given I am connected as an employee", () => {
-  describe("When I am on NewBill Page", () => {
-    test("Then I try upload a valid file", () => {
+  describe("When I am on NewBill Page and I try to upload a valid file", () => {
+    test("Then", () => {
       const html = NewBillUI()
       document.body.innerHTML = html
       //to-do write assertion'
-
-      // pathname = ROUTES_PATH['NewBill']
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
@@ -48,12 +46,13 @@ describe("Given I am connected as an employee", () => {
       expect(mockHandleChangeFile).toHaveBeenCalledTimes(1)
       expect(inputFile.files[0]).toMatchObject(file)
     })
-    
-    test("Then I try to upload", () => {
+  })
+
+  describe("When I am on NewBill Page and I try to upload a invalid file", () => {
+    test("Then ", () => {
       const html = NewBillUI()
       document.body.innerHTML = html
       //to-do write assertion
-
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
@@ -76,13 +75,13 @@ describe("Given I am connected as an employee", () => {
       );
 
       userEvent.upload(inputFile, file);
-      // console.log(inputFile.files[0].webkitRelativePath)
 
       expect(mockHandleChangeFile).toHaveBeenCalledTimes(1)
-      // console.log(typeof inputFile.files[0]);
-      expect(inputFile.files[0]).toBeTruthy() // change to beundefined
+      expect(Object.keys(inputFile.files[0]).length).toBe(0)
     })
-    
+  })
+  
+  describe("When I am on NewBill Page and I try to submit the new bill", () => {
     test("Then handleSubmit", () => {
       const html = NewBillUI()
       document.body.innerHTML = html
@@ -148,7 +147,6 @@ describe("Given I am a user connected as Employee", () => {
 
     //   expect(screen.getByTestId("btn-new-bill")).toBeTruthy()
     })
-
   })
 
   describe("When an error occurs on API", () => {
@@ -168,9 +166,6 @@ describe("Given I am a user connected as Employee", () => {
       root.setAttribute("id", "root")
       document.body.appendChild(root)
       router()
-    })
-
-    test("fetches bills from an API and fails with 404 message error", async () => {
 
       const html = NewBillUI()
       document.body.innerHTML = html
@@ -178,11 +173,9 @@ describe("Given I am a user connected as Employee", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
+    })
 
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-        window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee'
-      }))
+    test("fetches bills from an API and fails with 404 message error", async () => {
 
       mockStore.bills.mockImplementation(() => {
         return {
@@ -194,41 +187,32 @@ describe("Given I am a user connected as Employee", () => {
 
       const newBill = new NewBill({ document, onNavigate, store: mockStore, localStorage: localStorageMock })
 
-
       let mockEvent = {
         target: { value: 'https://localhost:3456/images/test.jpg' },
         preventDefault: jest.fn()
       }
       newBill.handleChangeFile(mockEvent)
       expect(mockStore.bills().create).rejects.toThrow(/Erreur 404/)
+    })
 
-      // 
-      // mockEvent.target.mockReturnValue("https://localhost:3456/images/test.jpg");
-      // jest.spyOn(event, 'preventDefault')
+    test("fetches bills from an API and fails with 500 message error", async () => {
 
+      mockStore.bills.mockImplementation(() => {
+        return {
+          create : (bill) =>  {
+            return Promise.reject(new Error("Erreur 500"))
+          }
+        }
+      })
 
-      // const mockHandleChangeFile = jest.fn(newBill.handleChangeFile(mockEvent))
-      // const mockUpdateBill = jest.fn(newBill.updateBill)
-      // jest.spyOn(mockUpdateBill)
+      const newBill = new NewBill({ document, onNavigate, store: mockStore, localStorage: localStorageMock })
 
-      // const inputFile = screen.getByTestId(`file`)
-      // inputFile.addEventListener("change", (event) => mockHandleChangeFile(event))
-
-      // const file = new File(
-      //   ["image"], 
-      //   "image.png", 
-      //   { type: "image/png", }
-      // );
-
-      // userEvent.upload(inputFile, file);
-      // console.log(typeof inputFile.files[0]);
-      // expect(inputFile.files[0]).toBeTruthy() // change to beundefined
-
-      // console.log(mockHandleChangeFile)
-
-      // expect(mockUpdateBill).rejects.toThrow()
-      // expect(mockHandleChangeFile).toHaveBeenCalledTimes(1)
-      // expect(mockHandleChangeFile(mockEvent)).rejects.toThrow(/Erreur 404/)
+      let mockEvent = {
+        target: { value: 'https://localhost:3456/images/test.jpg' },
+        preventDefault: jest.fn()
+      }
+      newBill.handleChangeFile(mockEvent)
+      expect(mockStore.bills().create).rejects.toThrow(/Erreur 500/)
     })
   })
 })
