@@ -12,6 +12,7 @@ import router from "../app/Router.js";
 
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store"
+import { error } from "jquery";
 
 
 describe("Given I am connected as an employee", () => {
@@ -153,6 +154,7 @@ describe("Given I am a user connected as Employee", () => {
 
     beforeEach(() => {
       jest.spyOn(mockStore, "bills")
+
       Object.defineProperty(
           window,
           'localStorage',
@@ -177,7 +179,10 @@ describe("Given I am a user connected as Employee", () => {
 
     test("fetches bills from an API and fails with 404 message error", async () => {
 
-      mockStore.bills.mockImplementation(() => {
+      const logSpy = jest.spyOn(console, 'error')
+      // console.error = jest.fn()
+
+      mockStore.bills.mockImplementationOnce(() => {
         return {
           create : (bill) =>  {
             return Promise.reject(new Error("Erreur 404"))
@@ -192,10 +197,24 @@ describe("Given I am a user connected as Employee", () => {
         preventDefault: jest.fn()
       }
       newBill.handleChangeFile(mockEvent)
-      expect(mockStore.bills().create).rejects.toThrow(/Erreur 404/)
+
+      await new Promise(process.nextTick);
+
+      // console.log(logSpy.mock.instances);
+      const message = logSpy.mock.calls[0][0].message
+
+      // expect(console.error).toHaveErrorMessage('Erreur 404');
+
+      // expect(() => newBill.handleChangeFile()).toThrow(Error)
+      expect(logSpy).toHaveBeenCalledTimes(1)
+      expect(message).toMatch(/Erreur 404/)
+
+      logSpy.mockRestore()
     })
 
     test("fetches bills from an API and fails with 500 message error", async () => {
+
+      const logSpy = jest.spyOn(console, 'error');
 
       mockStore.bills.mockImplementation(() => {
         return {
@@ -212,7 +231,16 @@ describe("Given I am a user connected as Employee", () => {
         preventDefault: jest.fn()
       }
       newBill.handleChangeFile(mockEvent)
-      expect(mockStore.bills().create).rejects.toThrow(/Erreur 500/)
+
+      await new Promise(process.nextTick);
+
+      console.log(logSpy.mock.calls[0][0].message);
+      const message = logSpy.mock.calls[0][0].message
+
+      expect(logSpy).toHaveBeenCalledTimes(1);
+      expect(message).toMatch(/Erreur 500/);
+
+      logSpy.mockRestore()
     })
   })
 })
