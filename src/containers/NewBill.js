@@ -30,8 +30,9 @@ export default class NewBill {
     if(!allowedExtensions.test(fileName)) {
       e.target.value = '';
       if(!document.getElementById('file-error')) {
-        e.target.parentNode.appendChild(errorFragment)
-        document.getElementById('file-error').style.color = 'red'
+        // e.target.parentNode.appendChild(errorFragment)
+        // document.getElementById('file-error').style.color = 'red'
+        alert("Veuillez sélectionner un fichier de type .jpg .jpeg ou .png");
       }
       return
     } else {

@@ -97,16 +97,12 @@ describe("Given I am connected as an employee", () => {
 
       expect(mockHandleClickIconEye).toHaveBeenCalledTimes(1);
       expect(modal.innerHTML).toBeTruthy()
-      // await waitFor(() => expect(screen.getByRole('dialog')).toHaveClass('show'))
-      // await screen.findByRole('dialog', {hidden: true})
-      // expect(screen.getByRole('dialog', {hidden: true})).toHaveClass('fade')
-      // await findByRole(() => expect(screen.getByRole('dialog'/*, {hidden: true}*/)).toHaveClass('show'), 2000)
     })
   })
 
   //
   describe("When I am on Bills Page and Bills.store is null", () => {
-    // Branch only
+    // Bills.getBills() branch when store is null
     test("Then the getBills function should returned undefined", async () => {
 
       const onNavigate = () => document.body.innerHTML = ROUTES_PATH[Bills];
@@ -134,76 +130,7 @@ describe("Given I am connected as an employee", () => {
 })
 
 // test d'intégration GET
-// describe("Given I am a user connected as Employee", () => {
-//   describe("When I navigate to Bills page", () => {
-//     test("fetches bills from mock API GET", async () => {
-//       localStorage.setItem("user", JSON.stringify({ type: "Employee", email: "a@a" }));
-//       const root = document.createElement("div")
-//       root.setAttribute("id", "root")
-//       document.body.append(root)
-//       router()
-//       window.onNavigate(ROUTES_PATH.Bills)
-
-//       await waitFor(() => screen.getByText("Mes notes de frais"))
-
-//       expect(screen.getByTestId("btn-new-bill")).toBeTruthy()
-//     })
-//   })
-
-//   describe("When an error occurs on API", () => {
-
-//     beforeEach(() => {
-//       jest.spyOn(mockStore, "bills")
-
-//       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-
-//       window.localStorage.setItem('user', JSON.stringify({
-//         type: 'Employee',
-//         email: "a@a"
-//       }))
-
-//       const root = document.createElement("div")
-//       root.setAttribute("id", "root")
-//       document.body.appendChild(root)
-//       router()
-//     })
-
-//     test("fetches bills from an API and fails with 404 message error", async () => {
-
-//       mockStore.bills.mockImplementationOnce(() => {
-//         return {
-//           list : () =>  {
-//             return Promise.reject(new Error("Erreur 404"))
-//           }
-//         }
-//       })
-//       window.onNavigate(ROUTES_PATH.Bills)
-
-//       const bills = new Bills({ document, onNavigate, store: mockStore, localStorage: localStorageMock })
-
-//       expect(bills.getBills()).rejects.toThrow(/Erreur 404/)
-//     })
-
-//     test("fetches messages from an API and fails with 500 message error", async () => {
-
-//       mockStore.bills.mockImplementationOnce(() => {
-//         return {
-//           list : () =>  {
-//             return Promise.reject(new Error("Erreur 500"))
-//           }
-//         }
-//       })
-//       window.onNavigate(ROUTES_PATH.Bills)
-
-//       const bills = new Bills({ document, onNavigate, store: mockStore, localStorage: localStorageMock })
-
-//       expect(bills.getBills()).rejects.toThrow(/Erreur 500/)
-//     })
-//   })
-// })
-
-// test d'intégration GET
-describe("Given I am a user connected as Employee", () => {
+describe("Given I am a user connected as Employee and I navigate to Bills", () => {
 
   beforeEach(() => {
     jest.spyOn(mockStore, "bills")
@@ -226,8 +153,8 @@ describe("Given I am a user connected as Employee", () => {
     document.body.innerHTML = ''
   })
 
-  describe("When I navigate to Bills", () => {
-    test("fetches bills from mock API GET", async () => {
+  describe("When it fetches bills from mock API GET without error", () => {
+    test("Then 'Nouvelle note de frais' button should be on the screen", async () => {
 
       window.onNavigate(ROUTES_PATH.Bills)
       await waitFor(() => screen.getByTestId("btn-new-bill"))
@@ -235,8 +162,8 @@ describe("Given I am a user connected as Employee", () => {
       
     })
 
-  describe("When an error occurs on API", () => {
-    test("fetches bills from an API and fails with 404 message error", async () => {
+  describe("When an error occurs on API GET (Store.bills().list)", () => {
+    test("Then it fails with 404 message error", async () => {
       
       mockStore.bills.mockImplementationOnce(() => {
         return {
@@ -253,7 +180,7 @@ describe("Given I am a user connected as Employee", () => {
       expect(screen.getByTestId('error-message').textContent).toMatch(/Erreur 404/)
     })
 
-    test("fetches messages from an API and fails with 500 message error", async () => {
+    test("Then it fails with 500 message error", async () => {
 
       mockStore.bills.mockImplementationOnce(() => {
         return {

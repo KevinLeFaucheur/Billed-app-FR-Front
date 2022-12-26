@@ -12,12 +12,11 @@ import router from "../app/Router.js";
 
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store"
-import { error } from "jquery";
 
 
-describe("Given I am connected as an employee", () => {
-  describe("When I am on NewBill Page and I try to upload a valid file", () => {
-    test("Then", () => {
+describe("Given I am connected as an employee and I am on NewBill Page", () => {
+  describe("When I try to upload a valid file", () => {
+    test("Then the value in input file should match the uploaded file", () => {
       const html = NewBillUI()
       document.body.innerHTML = html
       //to-do write assertion'
@@ -49,8 +48,8 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  describe("When I am on NewBill Page and I try to upload a invalid file", () => {
-    test("Then ", () => {
+  describe("When I try to upload a invalid file", () => {
+    test("Then the File in input file should have no property", () => {
       const html = NewBillUI()
       document.body.innerHTML = html
       //to-do write assertion
@@ -82,8 +81,8 @@ describe("Given I am connected as an employee", () => {
     })
   })
   
-  describe("When I am on NewBill Page and I try to submit the new bill", () => {
-    test("Then handleSubmit", () => {
+  describe("When I try to submit the new bill", () => {
+    test("Then Newbill.updateBill should have been called once", () => {
       const html = NewBillUI()
       document.body.innerHTML = html
       //to-do write assertion
@@ -110,31 +109,21 @@ describe("Given I am connected as an employee", () => {
       userEvent.type(screen.getByTestId('datepicker'), '2022-12-25')
       expect(screen.getByTestId('datepicker').value).toBe('2022-12-25')
 
-      // console.log(screen.getByTestId('datepicker'));
-
       userEvent.type(screen.getByTestId('amount'), '249')
       expect(screen.getByTestId('amount').value).toBe('249')
-      // console.log(screen.getByTestId('amount').value);
 
       userEvent.type(screen.getByTestId('pct'), '17')
       expect(screen.getByTestId('pct').value).toBe('17')
-      // console.log(screen.getByTestId('pct').value);
-
-      // userEvent.type(getByTestId('file'), '')
-      // expect(getByTestId('file').value).toBe('')
-
-
       
       fireEvent.submit(screen.getByTestId('form-new-bill'));
-      // expect(mockHandleSubmit).toHaveBeenCalled()
       expect(newBill.updateBill).toHaveBeenCalledTimes(1)
     })
   })
 })
 
 // test d'intégration POST
-describe("Given I am a user connected as Employee", () => {
-  describe("When I navigate to Bills page", () => {
+describe("Given I am a user connected as Employee and I navigate to NewBill page", () => {
+  describe("When no error occurs", () => {
 
     test("fetches bills from mock API GET", async () => {
     //   localStorage.setItem("user", JSON.stringify({ type: "Employee", email: "a@a" }));
@@ -150,7 +139,7 @@ describe("Given I am a user connected as Employee", () => {
     })
   })
 
-  describe("When an error occurs on API", () => {
+  describe("When an error occurs on API POST (Store.bills().create)", () => {
 
     beforeEach(() => {
       jest.spyOn(mockStore, "bills")
@@ -177,10 +166,9 @@ describe("Given I am a user connected as Employee", () => {
       }
     })
 
-    test("fetches bills from an API and fails with 404 message error", async () => {
+    test("Then it fails with 404 message error", async () => {
 
       const logSpy = jest.spyOn(console, 'error')
-      // console.error = jest.fn()
 
       mockStore.bills.mockImplementationOnce(() => {
         return {
@@ -200,12 +188,8 @@ describe("Given I am a user connected as Employee", () => {
 
       await new Promise(process.nextTick);
 
-      // console.log(logSpy.mock.instances);
       const message = logSpy.mock.calls[0][0].message
 
-      // expect(console.error).toHaveErrorMessage('Erreur 404');
-
-      // expect(() => newBill.handleChangeFile()).toThrow(Error)
       expect(logSpy).toHaveBeenCalledTimes(1)
       expect(message).toMatch(/Erreur 404/)
 
