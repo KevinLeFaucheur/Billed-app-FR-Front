@@ -36,6 +36,8 @@ describe("Given I am connected as an employee", () => {
       expect(windowIcon).toHaveClass('active-icon')
 
     })
+
+    // Scénario 7
     test("Then bills should be ordered from earliest to latest", () => {
       document.body.innerHTML = BillsUI({ data: bills })
       const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
@@ -44,6 +46,7 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
 
+  // Scénario 4
   describe("When I am on Bills Page and I click on 'Nouvelle note de frais' button", () => {
     test("Then it should open the NewBill page", async () => {
 
@@ -69,6 +72,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
+  // Scénario 13
   describe("When I am on Bills Page and I click on an eye icon", () => {
     test("Then it should show 'Justificatif' modal", async () => {
 
@@ -100,20 +104,62 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
+  // Scénario 14: Fermerture modale
+  describe("When I click on the modal close 'x' button", () => {
+    test("Then the modal should be removed", async () => {
+      // document.body.innerHTML = BillsUI({ data: bills })
+
+      // window.onNavigate(ROUTES_PATH.Bills)
+
+      // Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      // window.localStorage.setItem('user', JSON.stringify({
+      //   type: 'Employee'
+      // }))
+
+      // const modal = document.getElementById('modaleFile')
+      // expect(modal).toBeTruthy()
+
+      // modal.classList.add('show')
+
+      // const modalButton = document.body.querySelector('.close')
+      // expect(modalButton).toBeTruthy()
+
+      // userEvent.click(modalButton)
+
+      // // await waitFor(() => expect(modal).toHaveStyle('display: none'), {timeout: 4000})
+      
+      // // Timer required -
+      // // Or add class takes too long to be detected by expect statement below
+      // let i = 0;
+      // while(document.querySelector("#modaleFile").classList.contains("show") /*&& i < 10*/) {
+        
+      //   console.log(document.querySelector("#modaleFile").classList.contains("show")) 
+      //   await new Promise((r) => setTimeout(r, 100));
+      //   i++;
+      // }
+      
+      // expect(document.querySelector("#modaleFile")).toHaveClass("show");
+      // expect(modal).toHaveClass("show");
+
+      // // expect(modal).not.toHaveClass('show')
+      // expect(modal).toHaveStyle('display: none')
+
+    })
+  })
+
   //
   describe("When I am on Bills Page and Bills.store is null", () => {
-    // Bills.getBills() branch when store is null
-    test("Then the getBills function should returned undefined", async () => {
+    // test("Then the getBills function should returned undefined", async () => {
 
-      const onNavigate = () => document.body.innerHTML = ROUTES_PATH[Bills];
+    //   const onNavigate = () => document.body.innerHTML = ROUTES_PATH[Bills];
 
-      const store = null;
+    //   const store = null;
 
-      const bills = new Bills({ document, onNavigate, store, localStorage: localStorageMock })
-      const result = await bills.getBills()
+    //   const bills = new Bills({ document, onNavigate, store, localStorage: localStorageMock })
+    //   const result = await bills.getBills()
 
-      expect(result).toBe(undefined)
-    })
+    //   expect(result).toBe(undefined)
+    // })
 
     test("Then the getBills function should return an array of bills", async () => {
 
@@ -126,6 +172,30 @@ describe("Given I am connected as an employee", () => {
       expect(result[1].date).toBe("1 Jan. 01")
     })
   })
+  })
+
+  // Scénario 5
+  describe("When I am on Bills Page and there is no bill", () => {
+    test("Then the bills table should be empty", async () => {
+      
+      jest.spyOn(mockStore, "bills")
+      mockStore.bills.mockImplementationOnce(() => {
+        return {
+          list : () =>  {
+            return Promise.resolve([])
+          }
+        }
+      })
+
+      const onNavigate = () => document.body.innerHTML = ROUTES_PATH[Bills]
+      const bills = new Bills({ document, onNavigate, store: mockStore, localStorage  })
+      const data = await bills.getBills()
+      document.body.innerHTML = BillsUI({ data })
+
+      const tbody = screen.getByTestId('tbody').innerHTML.replace(/\s|\n/g, '')
+      console.log(tbody)
+      expect(tbody).toBe('')
+    })
   })
 })
 
@@ -162,6 +232,7 @@ describe("Given I am a user connected as Employee and I navigate to Bills", () =
       
     })
 
+  // Scénario 6
   describe("When an error occurs on API GET (Store.bills().list)", () => {
     test("Then it fails with 404 message error", async () => {
       

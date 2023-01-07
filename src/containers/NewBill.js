@@ -25,20 +25,22 @@ export default class NewBill {
     // File validation
     const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
     const errorFragment = document.createRange().createContextualFragment(
-      `<p id='file-error'>Veuillez sélectionner un fichier de type .jpg .jpeg ou .png</p>`)
+      `<p id='file-error' data-testid="file-error-test">Veuillez sélectionner un fichier de type .jpg .jpeg ou .png</p>`)
+    console.log(fileName == '' ? filePath : fileName, allowedExtensions.test(fileName))
 
     if(!allowedExtensions.test(fileName)) {
       e.target.value = '';
+      // alert("Veuillez sélectionner un fichier de type .jpg .jpeg ou .png");
+
       if(!document.getElementById('file-error')) {
-        // e.target.parentNode.appendChild(errorFragment)
-        // document.getElementById('file-error').style.color = 'red'
-        alert("Veuillez sélectionner un fichier de type .jpg .jpeg ou .png");
+        e.target.parentNode.appendChild(errorFragment)
+        document.getElementById('file-error').style.color = 'red'
       }
       return
-    } else {
-      // document.getElementById('file-error').remove()
+    } 
+    else if(document.getElementById('file-error')) {
+      document.getElementById('file-error').remove()
     }
-    //
 
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
