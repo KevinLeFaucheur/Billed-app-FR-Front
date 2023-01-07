@@ -19,6 +19,7 @@ jest.mock("../app/store", () => mockStore)
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
+    // Scénario 3
     test("Then bill icon in vertical layout should be highlighted", async () => {
 
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
@@ -34,7 +35,6 @@ describe("Given I am connected as an employee", () => {
       const windowIcon = screen.getByTestId('icon-window')
       //to-do write expect expression
       expect(windowIcon).toHaveClass('active-icon')
-
     })
 
     // Scénario 7
@@ -45,6 +45,7 @@ describe("Given I am connected as an employee", () => {
       const datesSorted = [...dates].sort(antiChrono)
       expect(dates).toEqual(datesSorted)
     })
+  })
 
   // Scénario 4
   describe("When I am on Bills Page and I click on 'Nouvelle note de frais' button", () => {
@@ -105,61 +106,59 @@ describe("Given I am connected as an employee", () => {
   })
 
   // Scénario 14: Fermerture modale
-  describe("When I click on the modal close 'x' button", () => {
-    test("Then the modal should be removed", async () => {
-      // document.body.innerHTML = BillsUI({ data: bills })
+  // describe("When I click on the modal close 'x' button", () => {
+  //   test("Then the modal should be removed", async () => {
+  //     document.body.innerHTML = BillsUI({ data: bills })
 
-      // window.onNavigate(ROUTES_PATH.Bills)
+  //     window.onNavigate(ROUTES_PATH.Bills)
 
-      // Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-      // window.localStorage.setItem('user', JSON.stringify({
-      //   type: 'Employee'
-      // }))
+  //     Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+  //     window.localStorage.setItem('user', JSON.stringify({
+  //       type: 'Employee'
+  //     }))
 
-      // const modal = document.getElementById('modaleFile')
-      // expect(modal).toBeTruthy()
+  //     const modal = document.getElementById('modaleFile')
+  //     expect(modal).toBeTruthy()
 
-      // modal.classList.add('show')
+  //     modal.classList.add('show')
 
-      // const modalButton = document.body.querySelector('.close')
-      // expect(modalButton).toBeTruthy()
+  //     const modalButton = document.body.querySelector('.close')
+  //     expect(modalButton).toBeTruthy()
 
-      // userEvent.click(modalButton)
+  //     userEvent.click(modalButton)
 
-      // // await waitFor(() => expect(modal).toHaveStyle('display: none'), {timeout: 4000})
+  //     // await waitFor(() => expect(modal).toHaveStyle('display: none'), {timeout: 4000})
       
-      // // Timer required -
-      // // Or add class takes too long to be detected by expect statement below
-      // let i = 0;
-      // while(document.querySelector("#modaleFile").classList.contains("show") /*&& i < 10*/) {
+  //     // Timer required -
+  //     // Or add class takes too long to be detected by expect statement below
+  //     // let i = 0;
+  //     // while(document.querySelector("#modaleFile").classList.contains("show") /*&& i < 10*/) {
         
-      //   console.log(document.querySelector("#modaleFile").classList.contains("show")) 
-      //   await new Promise((r) => setTimeout(r, 100));
-      //   i++;
-      // }
+  //     //   console.log(document.querySelector("#modaleFile").classList.contains("show")) 
+  //     //   await new Promise((r) => setTimeout(r, 100));
+  //     //   i++;
+  //     // }
       
-      // expect(document.querySelector("#modaleFile")).toHaveClass("show");
-      // expect(modal).toHaveClass("show");
+  //     expect(document.querySelector("#modaleFile")).toHaveClass("show");
+  //     expect(modal).toHaveClass("show");
 
-      // // expect(modal).not.toHaveClass('show')
-      // expect(modal).toHaveStyle('display: none')
+  //     // expect(modal).not.toHaveClass('show')
+  //     expect(modal).toHaveStyle('display: none')
+  //   })
+  // })
 
+  // 
+  describe("When I am on Bills Page and Store is called (mockStore)", () => {
+    test("Then the getBills function should returned undefined", async () => {
+
+      const onNavigate = () => document.body.innerHTML = ROUTES_PATH[Bills];
+
+      const store = null;
+      const bills = new Bills({ document, onNavigate, store, localStorage: localStorageMock })
+      const result = await bills.getBills()
+
+      expect(result).toBe(undefined)
     })
-  })
-
-  //
-  describe("When I am on Bills Page and Bills.store is null", () => {
-    // test("Then the getBills function should returned undefined", async () => {
-
-    //   const onNavigate = () => document.body.innerHTML = ROUTES_PATH[Bills];
-
-    //   const store = null;
-
-    //   const bills = new Bills({ document, onNavigate, store, localStorage: localStorageMock })
-    //   const result = await bills.getBills()
-
-    //   expect(result).toBe(undefined)
-    // })
 
     test("Then the getBills function should return an array of bills", async () => {
 
@@ -171,7 +170,6 @@ describe("Given I am connected as an employee", () => {
       expect(result[0].status).toBe("En attente")
       expect(result[1].date).toBe("1 Jan. 01")
     })
-  })
   })
 
   // Scénario 5
@@ -231,6 +229,7 @@ describe("Given I am a user connected as Employee and I navigate to Bills", () =
       expect(screen.getByTestId("btn-new-bill").textContent).toBe('Nouvelle note de frais')
       
     })
+  })
 
   // Scénario 6
   describe("When an error occurs on API GET (Store.bills().list)", () => {
@@ -267,8 +266,6 @@ describe("Given I am a user connected as Employee and I navigate to Bills", () =
       console.log(screen.getByTestId('error-message').textContent);
       expect(screen.getByTestId('error-message').textContent).toMatch(/Erreur 500/)
     })
-  })
-
   })
 })
 
