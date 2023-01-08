@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { findByRole, getAllByTestId, getByTestId, getByText, screen, waitFor } from "@testing-library/dom"
+import { screen, waitFor } from "@testing-library/dom"
 import "@testing-library/jest-dom"
 import BillsUI from "../views/BillsUI.js"
 import Bills from "../containers/Bills.js"
@@ -104,48 +104,6 @@ describe("Given I am connected as an employee", () => {
       expect(modal.innerHTML).toBeTruthy()
     })
   })
-
-  // 
-  // describe("When I click on the modal close 'x' button", () => {
-  //   test("Then the modal should be removed", async () => {
-  //     document.body.innerHTML = BillsUI({ data: bills })
-
-  //     window.onNavigate(ROUTES_PATH.Bills)
-
-  //     Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-  //     window.localStorage.setItem('user', JSON.stringify({
-  //       type: 'Employee'
-  //     }))
-
-  //     const modal = document.getElementById('modaleFile')
-  //     expect(modal).toBeTruthy()
-
-  //     modal.classList.add('show')
-
-  //     const modalButton = document.body.querySelector('.close')
-  //     expect(modalButton).toBeTruthy()
-
-  //     userEvent.click(modalButton)
-
-  //     // await waitFor(() => expect(modal).toHaveStyle('display: none'), {timeout: 4000})
-      
-  //     // Timer required -
-  //     // Or add class takes too long to be detected by expect statement below
-  //     // let i = 0;
-  //     // while(document.querySelector("#modaleFile").classList.contains("show") /*&& i < 10*/) {
-        
-  //     //   console.log(document.querySelector("#modaleFile").classList.contains("show")) 
-  //     //   await new Promise((r) => setTimeout(r, 100));
-  //     //   i++;
-  //     // }
-      
-  //     expect(document.querySelector("#modaleFile")).toHaveClass("show");
-  //     expect(modal).toHaveClass("show");
-
-  //     // expect(modal).not.toHaveClass('show')
-  //     expect(modal).toHaveStyle('display: none')
-  //   })
-  // })
 
   // 
   describe("When I am on Bills Page and Store is called (mockStore)", () => {
