@@ -47,10 +47,8 @@ describe("Given I am connected as an employee", () => {
         type: 'Employee'
       }))
 
-      const newBill = new NewBill({ document, onNavigate, store: mockStore, localStorage: localStorageMock })
-      // const mockHandleChangeFile = jest.fn(newBill.handleChangeFile)
+      new NewBill({ document, onNavigate, store: mockStore, localStorage: localStorageMock })
       const inputFile = screen.getByTestId(`file`)
-      // inputFile.addEventListener("change", (event) => mockHandleChangeFile(event))
 
       const file = new File(
         ["image"], 
@@ -58,16 +56,9 @@ describe("Given I am connected as an employee", () => {
         { type: "image/jpeg", }
       )
 
-      // userEvent.upload(inputFile, file)
       fireEvent.change(inputFile, { target: { files: [file], }, })
-      
-      console.log(expect.getState().currentTestName)
 
-      // expect(mockHandleChangeFile).toHaveBeenCalledTimes(1)
       expect(inputFile.files[0]).toStrictEqual(file)
-
-      // const fileError = document.getElementById('file-error')
-      // expect(fileError).not.toBeInTheDocument()
     })
   })
 
@@ -89,7 +80,6 @@ describe("Given I am connected as an employee", () => {
 
       const mockHandleChangeFile = jest.fn(newBill.handleChangeFile)
       const inputFile = screen.getByTestId(`file`)
-      // inputFile.value = ''
       inputFile.addEventListener("change", (event) => mockHandleChangeFile(event))
 
       const file = new File(
@@ -98,10 +88,7 @@ describe("Given I am connected as an employee", () => {
         { type: "image/gif", }
       );
 
-      // userEvent.upload(inputFile, file);
       fireEvent.change(inputFile, { target: { files: [file], }, })
-
-      console.log(inputFile.files[0].length)
 
       const fileError = screen.getByTestId('file-error-test')
       expect(fileError).toBeTruthy()
@@ -128,11 +115,6 @@ describe("Given I am connected as an employee", () => {
       const newBill = new NewBill({ document, onNavigate, store: mockStore, localStorage: localStorageMock })
 
       jest.spyOn(newBill, 'updateBill')
-
-      const mockHandleSubmit = jest.fn(newBill.handleSubmit)
-
-      const submitButton = screen.getByRole(`button`)
-      // submitButton.addEventListener("change", (event) => mockHandleSubmit(event))
 
       const inputFile = screen.getByTestId(`file`)
 

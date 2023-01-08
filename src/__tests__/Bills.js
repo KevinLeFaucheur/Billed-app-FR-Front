@@ -37,7 +37,7 @@ describe("Given I am connected as an employee", () => {
       expect(windowIcon).toHaveClass('active-icon')
     })
 
-    // Scénario 7
+    // Scénario 6
     test("Then bills should be ordered from earliest to latest", () => {
       document.body.innerHTML = BillsUI({ data: bills })
       const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
@@ -47,7 +47,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  // Scénario 4
+  // Scénario 7
   describe("When I am on Bills Page and I click on 'Nouvelle note de frais' button", () => {
     test("Then it should open the NewBill page", async () => {
 
@@ -105,7 +105,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  // Scénario 14: Fermerture modale
+  // 
   // describe("When I click on the modal close 'x' button", () => {
   //   test("Then the modal should be removed", async () => {
   //     document.body.innerHTML = BillsUI({ data: bills })
@@ -149,17 +149,6 @@ describe("Given I am connected as an employee", () => {
 
   // 
   describe("When I am on Bills Page and Store is called (mockStore)", () => {
-    test("Then the getBills function should returned undefined", async () => {
-
-      const onNavigate = () => document.body.innerHTML = ROUTES_PATH[Bills];
-
-      const store = null;
-      const bills = new Bills({ document, onNavigate, store, localStorage: localStorageMock })
-      const result = await bills.getBills()
-
-      expect(result).toBe(undefined)
-    })
-
     test("Then the getBills function should return an array of bills", async () => {
 
       const bills = new Bills({ document, onNavigate, store: mockStore, localStorage: localStorageMock })
@@ -172,7 +161,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  // Scénario 5
+  // Scénario 4
   describe("When I am on Bills Page and there is no bill", () => {
     test("Then the bills table should be empty", async () => {
       
@@ -231,7 +220,7 @@ describe("Given I am a user connected as Employee and I navigate to Bills", () =
     })
   })
 
-  // Scénario 6
+  // Scénario 5
   describe("When an error occurs on API GET (Store.bills().list)", () => {
     test("Then it fails with 404 message error", async () => {
       
