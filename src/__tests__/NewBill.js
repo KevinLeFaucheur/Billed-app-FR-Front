@@ -33,7 +33,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  // Scénario 11 & 12
+  // Scénario 11
   describe("When I am on NewBill page and I try to upload a valid file", () => {
     test("Then the value in input file should match the uploaded file", () => {
       document.body.innerHTML = NewBillUI()
@@ -99,7 +99,7 @@ describe("Given I am connected as an employee", () => {
   })
   
   describe("When I am on NewBill page and I try to submit the new bill", () => {  
-    // Scénario 11
+    // Scénario
     test("Then Newbill.updateBill should have been called once", async () => {
       document.body.innerHTML = NewBillUI()
 
