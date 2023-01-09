@@ -34,7 +34,7 @@ describe("Given I am connected as an employee", () => {
   })
 
   // Scénario 11 & 12
-  describe("When I try to upload a valid file", () => {
+  describe("When I am on NewBill page and I try to upload a valid file", () => {
     test("Then the value in input file should match the uploaded file", () => {
       document.body.innerHTML = NewBillUI()
 
@@ -52,7 +52,7 @@ describe("Given I am connected as an employee", () => {
 
       const file = new File(
         ["image"], 
-        "invalid.jpg", 
+        "image.jpg", 
         { type: "image/jpeg", }
       )
 
@@ -63,7 +63,7 @@ describe("Given I am connected as an employee", () => {
   })
 
   // Scénario 9
-  describe("When I try to upload a invalid file", () => {
+  describe("When I am on NewBill page and I try to upload a invalid file", () => {
     test("Then the File in input file should have no property", () => {
       document.body.innerHTML = NewBillUI()
 
@@ -98,7 +98,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
   
-  describe("When I try to submit the new bill", () => {  
+  describe("When I am on NewBill page and I try to submit the new bill", () => {  
     // Scénario 11
     test("Then Newbill.updateBill should have been called once", async () => {
       document.body.innerHTML = NewBillUI()
@@ -148,7 +148,7 @@ describe("Given I am connected as an employee", () => {
   })
 
   // Scénario 15
-  describe("When I click on disconnect button", () => {
+  describe("When I am on NewBill page and I click on disconnect button", () => {
     test("Then I should be on the Login page", async () => {
 
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
