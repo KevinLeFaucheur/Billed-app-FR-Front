@@ -30,7 +30,6 @@ export default class NewBill {
 
     if(!allowedExtensions.test(fileName)) {
       e.target.value = '';
-      // alert("Veuillez sélectionner un fichier de type .jpg .jpeg ou .png");
 
       if(!document.getElementById('file-error')) {
         e.target.parentNode.appendChild(errorFragment)
